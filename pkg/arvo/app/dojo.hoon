@@ -12,10 +12,15 @@
 =>  |%                                                  ::  external structures
     +$  id  sole-id                                     ::  session id
     +$  house                                           ::  all state
-      $:  %9
+      $:  %10
           egg=@u                                        ::  command count
           hoc=(map id session)                          ::  conversations
           acl=(set ship)                                ::  remote access whitelist
+      ==                                                ::
+    +$  conf                                            ::  prettyprinter settings
+      $:  dep=@ud                                       ::  maximum depth
+          veb=?(%base %most %lest)                      ::  default verbosity
+          pin=(map @tas ppin:us)                        ::  print overrides
       ==                                                ::
     +$  session                                         ::  per conversation
       $:  say=sole-share                                ::  command-line state
@@ -31,7 +36,8 @@
           var=(map term cage)                           ::  variable state
           old=(set term)                                ::  used TLVs
           buf=tape                                      ::  multiline buffer
-      ==                                                ::
+          cof=conf                                      ::  prettyprinter settings
+    ==                                                  ::
     +$  monkey                                          ::  per conversation
       $:  say=sole-share                                ::  command-line state
           dir=beam                                      ::  active path
@@ -168,7 +174,7 @@
     ::
       ;~  pfix  tis
         ;~  pose
-          (parse-variable (jest %dir) ;~(pfix ace :(stag 0 %ex parse-rood)))
+          (parse-variable (cold %dir (jest 'dir ')) :(stag 0 %ex parse-rood))
           (parse-variable sym ;~(pfix ace parse-source))
         ==
       ==
@@ -625,7 +631,9 @@
         ++  note  ^-  tang
                   ?-  p.p.mad
                     %0  ~
-                    %1  [[%rose [~ "  " ~] (skol p.q.cay) ~] maar]
+                    %1  =+  ses=(~(get by hoc.state) id)
+                        =+  ?~(ses [30 %base ~] cof.u.ses)
+                        [[%rose [~ "  " ~] (~(draw us -) [%& p.q.cay]) ~] maar]
                     %2  [[%rose [~ "  " ~] (dy-show-type-noun p.q.cay) ~] maar]
                     ::%3  handled above
                     %4  ~
@@ -665,7 +673,8 @@
       |=  [cay=cage tan=tang]
       %+  dy-rash  %tan
       %-  welp  :_  tan
-      ?+  p.cay  [(sell q.cay)]~
+      =+  cof==+((~(get by hoc.state) id) ?~(- [30 %base ~] cof.u.-))
+      ?+  p.cay  [(~(draw us cof) [%| q.cay]) ~]
         %tang  ;;(tang q.q.cay)
         %httr
           =+  hit=;;(httr:eyre q.q.cay)
@@ -807,7 +816,7 @@
     ::
     ++  dy-run-generator
       !.
-      |=  [cay=cage cig=dojo-config]
+      |=  [cay=cage cig=dojo-config =desk]
       ^+  +>+>
       ?.  (~(nest ut [%cell [%atom %$ ~] %noun]) | p.q.cay)
         ::  naked generator; takes one argument
@@ -850,8 +859,9 @@
       |.  ^-  vase
       =/  gat=vase  (slot 3 q.cay)
       =/  som=vase  (slot 6 gat)
-      =/  ven=vase  !>([now=now.hid eny=eny.hid bec=he-beak])
+      =/  ven=vase  !>([now=now.hid eny=eny.hid bec=he-beak(q.dir desk)])
       =/  poz=vase  (dy-sore p.cig)
+      =+  cof==+((~(get by hoc.state) id) ?~(- [30 %base ~] cof.u.-))
       =/  kev=vase
         =/  kuv=(unit vase)  (slew 7 som)
         =/  soz=(list [var=term vax=vase])
@@ -873,7 +883,7 @@
           (fall kuv !>(~))
         ~_  'dojo: bad-keyword (supplied sample incorrect)'
         ~_  'dojo: keywords allowed'
-        ~_  (skol p:(fall kuv !>(~)))
+        ~_  (~(draw us cof) [%& p:(fall kuv !>(~))])
         %+  slap
           (with-faces kuv+(need kuv) rep+(with-faces soz) ~)
         :+  %cncb  [%kuv]~
@@ -894,9 +904,9 @@
         ::  [ven poz kev] can't nest in som
         ::
         :~  'dojo: nest-need'
-            (skol p.som)
+            (~(draw us cof) [%& p.som])
             'dojo: nest-have'
-            (skol p.sam)
+            (~(draw us cof) [%& p.sam])
             'dojo: bad gate lost-argument (generator incorrect)'
         ==
       ::
@@ -905,9 +915,9 @@
         ::  ven can't nest in head
         ::
         :~  'dojo: nest-need'
-            (skol p.hed)
+            (~(draw us cof) [%& p.hed])
             'dojo: nest-have'
-            (skol p.ven)
+            (~(draw us cof) [%& p.ven])
             'dojo: bad gate event-sample (generator incorrect)'
         ==
       ::
@@ -920,18 +930,18 @@
         ::  argument required, but nothing can nest
         ::
         :~  'dojo: nest-need'
-            (skol p.zop)
+            (~(draw us cof) [%& p.zop])
             'dojo: nest-have'
-            (skol p.poz)
+            (~(draw us cof) [%& p.poz])
             'dojo: bad gate impossible-nest (generator incorrect)'
         ==
       ::  poz doesn't nest in zop
       ::
       ?<  (~(nest ut p.zop) | p.poz)
       :~  'dojo: nest-need'
-          (skol p.zop)
+          (~(draw us cof) [%& p.zop])
           'dojo: nest-have'
-          (skol p.poz)
+          (~(draw us cof) [%& p.poz])
           'dojo: bad-argument (supplied sample incorrect)'
       ==
     ::
@@ -990,7 +1000,7 @@
           %te  (dy-wool-poke p.bil q.bil)
           %ex  (dy-mere p.bil)
           %dv  (dy-sing hand+q.bil %a p.bil (snoc q.bil %hoon))
-          %ge  (dy-run-generator (dy-cage p.p.p.bil) q.p.bil)
+          %ge  (dy-run-generator (dy-cage p.p.p.bil) q.p.bil desk.q.p.p.bil)
           %sa
         =/  has-mark  .?((get-fit:clay he-beak %mar p.bil))
         ?.  has-mark
@@ -1682,30 +1692,43 @@
       =^  caz  old
         ?.  ?=(%8 -.old)  [~ old]
         (house-8-to-9 old)
-      ?>  ?=(%9 -.old)
+      =^  caz  old
+      ?.  ?=(%9 -.old)  [~ old]
+        (house-9-to-10 old)
+      ?>  ?=(%10 -.old)
       [caz ..on-init(state old)]
   ::
-  +$  house-any  $%(house house-8 house-7 house-6 house-5)
+  +$  house-any  $%(house house-9 house-8 house-7 house-6 house-5)
   ::
   +$  id-8  @tasession
   +$  house-8
       $:  %8
           egg=@u
-          hoc=(map id-8 session)
+          hoc=(map id-8 session-8-9)
+          acl=(set ship)
+      ==
+  +$  house-9
+      $:  %9
+          egg=@u
+          hoc=(map id session-8-9)
           acl=(set ship)
       ==
   ++  house-8-to-9
     |=  old=house-8
-    ^-  (quip card:agent:gall house)
+    ^-  (quip card:agent:gall house-9)
     :-  %+  turn  ~(tap in ~(key by hoc.old))
         |=  id=@ta
         ^-  card:agent:gall
         [%give %kick ~[/sole/[id]] ~]
     =-  [%9 egg.old - acl.old]
-    %-  ~(gas by *(map sole-id session))
+    %-  ~(gas by *(map sole-id session-8-9))
     %+  murn  ~(tap by hoc.old)
-    |=  [id=@ta s=session]
+    |=  [id=@ta s=session-8-9]
     (bind (upgrade-id:sole id) (late s))
+   ++  house-9-to-10
+    |=  old=house-9
+    ^-  (quip card:agent:gall house)
+    `[%10 egg.old (~(run by hoc.old) session-8-9-to-10) acl.old]
   ::
   +$  house-7        [%7 house-6-7]
   +$  house-6        [%6 house-6-7]
@@ -1729,6 +1752,21 @@
         old=(set term)                                ::  used TLVs
         buf=tape                                      ::  multiline buffer
     ==                                                ::
+    +$  session-8-9                                     ::  per conversation
+      $:  say=sole-share                              ::  command-line state
+          dir=beam                                    ::  active path
+          poy=(unit dojo-project)                     ::  working
+          $:  ::  sur: structure imports
+              ::
+              sur=(list cable:clay)
+              ::  lib: library imports
+              ::
+              lib=(list cable:clay)
+          ==
+          var=(map term cage)                           ::  variable state
+          old=(set term)                                ::  used TLVs
+          buf=tape                                      ::  multiline buffer
+      ==
   ++  house-6-7-to-8
     |=  old=house-6-7
     [%8 egg.old (~(run by hoc.old) session-6-to-8) acl.old]
@@ -1736,6 +1774,10 @@
     |=  old=session-6
     ~?  ?=(^ poy.old)  [dap.hid %cancelling-for-load]
     old(poy ~, -.dir [our.hid %base ud+0])
+  ++  session-8-9-to-10
+    |=  old=session-8-9
+    ^-  session
+    [say dir poy [sur lib] var old buf [30 %base ~]]:old
   ::
   +$  house-5
     [%5 egg=@u hoc=(map id-8 session-6)]
@@ -1792,6 +1834,28 @@
           old  ~
         ==
       [~ state]
+    ::
+        %pp-config
+      =/  upt  !<  $%  [%depth p=@ud]
+                       [%verbosity p=?(%base %lest %most)]
+                       [%add-custom p=term q=ppin:us]
+                       [%del-custom p=term]
+                       [%set-all-custom p=(map term ppin:us)]
+                   ==
+                vase
+      =.  hoc              ::  XX  update conf for individual sessions?
+        ?-  -<
+          %depth           (~(run by hoc) |=(=session session(dep.cof p.upt)))
+          %verbosity       (~(run by hoc) |=(=session session(veb.cof p.upt)))
+          %set-all-custom  (~(run by hoc) |=(=session session(pin.cof p.upt)))
+          %del-custom      %-  ~(run by hoc)
+                           |=  ses=session
+                           ses(pin.cof (~(del by pin.cof.ses) p.upt))
+          %add-custom      %-  ~(run by hoc)
+                           |=  ses=session
+                           ses(pin.cof (~(put by pin.cof.ses) [p q]:upt))
+        ==
+      `state
     ==
   ::
   [moves ..on-init]
